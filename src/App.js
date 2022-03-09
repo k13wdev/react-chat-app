@@ -1,6 +1,13 @@
+import Chat from "./view/Chat";
+import Profile from "./view/Profile";
+
+
 const App = () => {
   return (
-    <div>App</div>
+    <div className="container mx-auto">
+{/*       <Chat/> */}
+      <Profile/>
+    </div>
   )
 }
 
