@@ -1,32 +1,41 @@
-import React from 'react';
-import ChatBoxOwner from '../ChatBoxOwner/ChatBoxOwner';
-import ChatBox from '../ChatBox/ChatBox';
+import ChatboxGroup from '../Chatbox/ChatboxGroup';
+import Chatbox from '../Chatbox/Chatbox';
+import Owner from '../Chatbox/Owner';
+import Chatter from '../Chatbox/Chatter';
+import { useContext, useEffect } from 'react';
+import { SocketContext } from '../../app/context';
+import { useDispatch, useSelector  } from 'react-redux';
+import { pushMessage } from '../../feature/messages/messagesSlice';
+
 
 const ChatBody = () => {
+  const socket = useContext(SocketContext);
+  const dispatch = useDispatch();
+  const { messagesArr } = useSelector(state => state.messages);
+
+  useEffect(() => {
+    socket.on("MESSAGE_NEW", (data) => {
+      dispatch(pushMessage(data))
+    });
+  }, [])
+
   return (
-    <div className='py-1 px-4 self-end'>
-      <ul className='grid gap-1'>
-        <li>
-          <ChatBoxOwner/>
-        </li>
-        <li>
-          <ChatBox/>
-        </li>
+    <ChatboxGroup>
+      {
+        messagesArr.map((msg, idx) => {
 
-        <li>
-          <ChatBox/>
-        </li>
+          const message = msg.socketId === socket.id
+            ? <Owner text={msg.body} />
+            : <Chatter text={msg.body} time={msg.time} name={msg.name}/>
 
-        <li>
-          <ChatBox/>
-        </li>
-
-        <li>
-          <ChatBox/>
-        </li>
-
-      </ul>
-    </div>
+          return (
+            <Chatbox key={idx}>
+              {message}
+            </Chatbox>
+          )
+        })
+      }
+    </ChatboxGroup>
   )
 }
 

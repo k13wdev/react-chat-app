@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {io} from "socket.io-client";
+import { store } from "./app/store";
+import { Provider } from "react-redux";
+import { SocketContext, socket } from "./app/context";
 
-const socket = io();
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SocketContext.Provider value={socket}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </SocketContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
