@@ -2,7 +2,7 @@ import React from 'react';
 
 const NavBarProfile = () => {
   return (
-    <nav className="fixed inset-x-0 pt-14 pb-9 px-6 flex justify-between text-white bg-gradient-to-b from-dark-400 to-transparent">
+    <nav className="absolute inset-x-0 pt-14 pb-9 px-6 flex justify-between text-white bg-gradient-to-b from-dark-400 to-transparent">
       <button >
         <svg className='transform rotate-90' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>

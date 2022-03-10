@@ -4,7 +4,7 @@ import Profile from "./view/Profile";
 
 const App = () => {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto max-w-sm">
 {/*       <Chat/> */}
       <Profile/>
     </div>

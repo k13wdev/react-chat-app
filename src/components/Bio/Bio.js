@@ -2,9 +2,10 @@ import avatar from '../../assets/avatar.png'
 
 const Bio = () => {
   return (
-    <section className='-mt-2'>
-      <img src={avatar}/>
-      <div className='pt-4 pb-5 px-4 bg-white rounded-tl-xl  rounded-tr-xl '>
+    <section className='grid'>
+      <img src={avatar} className='object-cover w-96 h-96'/>
+
+      <div className='pt-4 pb-5 px-4 -mt-4 bg-white rounded-tl-xl  rounded-tr-xl '>
 
         <h2 className='mb-1 text-3xl font-bold text-dark-400'>Cat lovers</h2>
 
