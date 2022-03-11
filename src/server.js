@@ -1,3 +1,4 @@
+const { nanoid } = require('nanoid');
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -9,25 +10,51 @@ app.get('/');
 
 const messagesData = new Map();
 const usersData = new Map();
-const userName = ['Abigail', 'Tabitha', 'Alec', 'Alex',	'Alexander',	'Addie', 'Alec', 'Alex',	'Alexander',	'Addie'];
-
-
+const channel = {
+  id: nanoid(8),
+  name: "CHANNEL",
+  users: new Map()
+};
 
 io.on('connection', (socket) => {
+  let user = {};
 
-  const newUser = {
-    socketId: socket.id,
-    name: `user-${userName[Math.floor(Math.random() * 10)]}`
-  }
+  socket.on("USER_JOIN", (data) => {
+    user = {
+      ...data,
+      id: socket.id,
+    };
+    usersData.set(user.id, {...user});
+    socket.join(data.room);
+    channel.users.set(user.id, {...user});
+    console.log('user', socket.id, 'connect to', user.room,  channel.users);
+  });
 
-  usersData.set(newUser.socketId, {...newUser});
+  socket.on("USER_LEAVE", (data) => {
+    socket.leave(data);
+    channel.users.delete(socket.id)
+    console.log('user', socket.id, 'leave from', user.room,  channel.users);
+  });
+
+  socket.on('disconnect', () => {
+
+  });
 
   socket.on("MESSAGE_SEND", (data) => {
+    const user = usersData.get(socket.id);
+    data = {
+      ...data,
+      id: nanoid(8),
+      socketId: user.id,
+      auth: user.name,
+      avatar: user.avatar,
+      date: `${new Date().getHours()} : ${new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes()}`,
+    };
     messagesData.set(data.id, {...data});
-    socket.emit("MESSAGE_NEW", data);
-    socket.broadcast.emit("MESSAGE_NEW", data);
+    io.to(channel.name).emit('MESSAGE_NEW', data);
   });
 });
+
 server.listen(3001, () => {
   console.log('listening on *:3001');
 });

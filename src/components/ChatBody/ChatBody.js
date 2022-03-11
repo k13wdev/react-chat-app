@@ -17,16 +17,18 @@ const ChatBody = () => {
     socket.on("MESSAGE_NEW", (data) => {
       dispatch(pushMessage(data))
     });
+    return () => {
+      socket.off("MESSAGE_NEW")
+    }
   }, [])
 
   return (
     <ChatboxGroup>
       {
         messagesArr.map((msg, idx) => {
-
           const message = msg.socketId === socket.id
-            ? <Owner text={msg.body} />
-            : <Chatter text={msg.body} time={msg.time} name={msg.name}/>
+            ? <Owner text={msg.body} time={msg.date} image={msg.image} />
+            : <Chatter text={msg.body} time={msg.date} name={msg.auth} avatar={msg.avatar} image={msg.image}/>
 
           return (
             <Chatbox key={idx}>

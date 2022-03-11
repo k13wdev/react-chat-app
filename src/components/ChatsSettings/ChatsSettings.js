@@ -13,7 +13,7 @@ const ChatsSettings = () => {
           <span className='ml-auto text-dark-200'>No</span>
           <button className='text-dark-200'>
             <svg className='transform -rotate-90' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </li>
@@ -23,7 +23,7 @@ const ChatsSettings = () => {
           <span className='ml-auto text-dark-200'>142</span>
           <button className='text-dark-200'>
             <svg className='transform -rotate-90' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </li>
@@ -32,7 +32,7 @@ const ChatsSettings = () => {
           <span>Search</span>
           <button className='ml-auto text-dark-200'>
             <svg className='transform -rotate-90' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.00024 9L12.0002 15L18.0002 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </li>

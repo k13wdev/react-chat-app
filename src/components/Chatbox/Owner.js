@@ -1,11 +1,12 @@
-const Owner = ({text}) => {
+const Owner = ({text, time, image}) => {
+  console.log(image);
   return (
-    <>
-      <p className='pt-4 pb-8 px-4 ml-auto w-72 text-white bg-primary-400 rounded-xl rounded-br-md'>
-        {text}
-      </p>
-    </>
-  )
+    <div className="grid gap-1 pt-4 pb-8 px-4 ml-auto w-72 text-white bg-primary-400 rounded-xl rounded-br-md">
+      <p>{text}</p>
+      {image ? <img src={`data:image/jpg;base64,${image}`} alt="lol"/> : null}
+      <time className="justify-self-end text-xs">{time}</time>
+    </div>
+  );
 }
 
 export default Owner;

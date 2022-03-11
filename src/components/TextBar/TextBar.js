@@ -1,38 +1,53 @@
+import { render } from "@testing-library/react";
 import { useContext, useState } from "react";
 import { SocketContext } from "../../app/context";
-
+import imageToBase64 from 'image-to-base64/browser';
 
 const TextBar = () => {
   const [message, setMessage] = useState({value: ''})
   const socket = useContext(SocketContext);
 
-  const onSubmitHandler = async (event) => {
+  const onSubmitHandler = (event) => {
     event.preventDefault();
-    const time = new Date(Date.now())
 
-    const data = {
-      id: Date.now(),
-      socketId: socket.id,
-      body: message.value,
-      time: `${time.getHours()}:${time.getMinutes()}`,
-    };
+    if(message.value) {
+      const data = {
+        body: message.value,
+      };
 
-    await socket.emit('MESSAGE_SEND', data)
-    setMessage({value: ''})
+      socket.emit('MESSAGE_SEND', data)
+      setMessage({value: ''})
+    }
   }
 
   const onChangeHandler = (event) =>  {
-    setMessage({value: event.target.value})
+    if(event.target.value.trim()) {
+      setMessage({value: event.target.value})
+    }
+  }
+
+
+  const onInputHandler = (event) => {
+    console.log(event.target.files[0 ]);
+    imageToBase64(event.target.files[0])
+    .then((response) => {
+      const data = {
+        image: response,
+      };
+      socket.emit('MESSAGE_SEND', data)
+    })
+    .catch((error) => console.log(error))
+    event.target.value = null
   }
 
   return (
     <form onSubmit={onSubmitHandler} className="pt-4 pb-9 px-4 flex items-center gap-4 text-dark-200 bg-white">
-      <button>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <label>
+        <input onInput={onInputHandler} className="sr-only" type="file" accept="image/png, image/jpeg"/>        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12.0001 4V20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           <path d="M4.00012 12H20.0001" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-      </button>
+      </label>
       <input className="p-2 w-full h-10  bg-dark-100 rounded-xl" onChange={onChangeHandler} value={message.value}/>
       <button>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

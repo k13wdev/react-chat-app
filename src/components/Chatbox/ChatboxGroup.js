@@ -1,12 +1,9 @@
-import Arrow from "../Arrow/Arrow";
-
 const ChatboxGroup = ({children}) => {
   return (
-    <div className='relative py-1 px-4 self-end'>
-      <ul className='grid gap-1'>
+    <div className='grid py-1 px-4 self-end h-full overflow-y-scroll'>
+      <ul className='grid gap-1 self-end'>
         {children}
       </ul>
-      <Arrow/>
     </div>
   )
 }
