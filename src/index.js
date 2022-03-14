@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -8,11 +8,11 @@ import { SocketContext, socket } from "./app/context";
 
 ReactDOM.render(
   <React.StrictMode>
-    <SocketContext.Provider value={socket}>
+    {/* <SocketContext.Provider value={socket}> */}
       <Provider store={store}>
         <App />
       </Provider>
-    </SocketContext.Provider>
+    {/* </SocketContext.Provider> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

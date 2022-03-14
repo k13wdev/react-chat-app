@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import messagesSlice from '../feature/messages/messagesSlice';
+import socketSlice from '../feature/socket/socketSlice';
 import userSlice from '../feature/users/userSlice';
+import { socketMiddleware } from './middleware';
 
 export const store = configureStore({
   reducer: {
-    messages: messagesSlice,
+    socket: socketSlice,
     user: userSlice
   },
+  middleware:  (getDefaultMiddleware) => getDefaultMiddleware().concat(socketMiddleware()),
 })

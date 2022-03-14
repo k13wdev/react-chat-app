@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Arrow = () => {
+const Arrow = ({onClickHandler}) => {
   return (
-    <button className='absolute right-2 bottom-2 flex justify-center items-center w-10 aspect-square bg-white drop-shadow-md rounded-full'>
+    <button onClick={onClickHandler} className='absolute right-2 bottom-24 flex justify-center items-center w-10 aspect-square bg-white drop-shadow-md rounded-full'>
       <svg
         className=""
         width="24"
@@ -19,6 +19,7 @@ const Arrow = () => {
           strokeLinejoin="round"
         />
       </svg>
+      {/* <span className='absolute bottom-8 px-2 flex items-center justify-center aspect-video text-xs text-white bg-primary-400 rounded-3xl'>14</span> */}
     </button>
   );
 }
