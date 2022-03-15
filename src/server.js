@@ -8,49 +8,42 @@ const io = new Server(server);
 
 app.get("/");
 
-const usersData = new Map();
-const channel = {
-  id: nanoid(8),
-  name: "CHANNEL",
-  users: new Map(),
-};
-
 io.on("connection", (socket) => {
   let user = {};
 
   socket.on("USER_JOIN", (data) => {
-    user = {
-      ...data,
-      id: socket.id,
-    };
-    usersData.set(user.id, { ...user });
-    socket.join(data.room);
-    channel.users.set(user.id, { ...user });
+    user = {...data}
+    socket.join(user.room);
+  });
+
+  socket.on('USER_TYPING', (data) => {
+    if(data.typing) {
+      socket.broadcast.emit('USER_TYPING', data.name);
+    } else {
+      socket.broadcast.emit('USER_TYPING', null);
+    }
   });
 
   socket.on("USER_LEAVE", (data) => {
     socket.leave(data);
-    channel.users.delete(socket.id);
   });
 
   socket.on("MESSAGE", (data) => {
-    const user = usersData.get(socket.id);
-
     data = {
-      ...data,
       id: nanoid(8),
-      socketId: user.id,
-      auth: user.name,
+      authId: user.id,
       avatar: user.avatar,
+      authName: user.name,
+      text: data.value,
+      image: data.image,
       date: `${new Date().getHours()} : ${
         new Date().getMinutes() < 10
           ? `0${new Date().getMinutes()}`
           : new Date().getMinutes()
       }`,
-
     };
 
-    io.to(channel.name).emit("MESSAGE", data);
+    io.to(user.room).emit("MESSAGE", data);
   });
 });
 

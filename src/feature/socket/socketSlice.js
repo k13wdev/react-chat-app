@@ -1,19 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   messagesArr: [],
-}
+  typing: ``
+};
 
 export const socketSlice = createSlice({
-  name: 'SOCKET',
+  name: "SOCKET",
   initialState,
   reducers: {
     MESSAGE: (state, action) => {
-      console.log(action);
-      state.messagesArr.push(action.payload)
-    }
+      state.messagesArr.push(action.payload);
+    },
+    USER_TYPING: (state, action) => {
+      state.typing = action.payload ? `${action.payload} typing now ...` : null
+    },
   },
-})
-
+});
 export const { MESSAGE } = socketSlice.actions;
 export default socketSlice.reducer;

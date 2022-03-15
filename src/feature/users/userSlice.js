@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 
 const initialState = {
   user: {},
@@ -17,11 +18,7 @@ export const fetchUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    ADD_USER_ID: (state, action) => {
-      state.user = {...state.user, id: action.payload}
-    } 
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
@@ -29,7 +26,7 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = 'idle'
-        state.user = {name: action.payload.name, avatar: `https://starwars-visualguide.com/assets/img/characters/${action.payload.id}.jpg`, room: 'CHANNEL'};
+        state.user = {id: nanoid(8), name: action.payload.name, avatar: `https://starwars-visualguide.com/assets/img/characters/${action.payload.id}.jpg`, room: 'CHANNEL'};
       })
   },
 });

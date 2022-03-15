@@ -1,12 +1,13 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { user, loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onClickHandler = () => {
-    /* socket.emit("USER_JOIN", user); */
+    dispatch({type: "SOCKET/USER_JOIN", payload: user});
     navigate("/chat");
   };
 

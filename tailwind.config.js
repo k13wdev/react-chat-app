@@ -16,7 +16,11 @@ module.exports = {
       "white": "#FFFFFF",
       "transparent": "transparent",
     },
-    extend: {},
+    extend: {
+      maxWidth: {
+        '28ch': '28ch',
+      }
+    },
   },
   plugins: [],
 }
