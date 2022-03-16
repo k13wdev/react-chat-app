@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toBase64 } from "../../app/helpers";
+import { debounce, toBase64 } from "../../app/helpers";
 
 const TextBar = () => {
   const {user} = useSelector((state) => state.user);
-  const {typing} = useSelector((state) => state.socket);
   const [message, setMessage] = useState({ value: "", image: "" });
   const dispatch = useDispatch();
-
   const onSubmitHandler = (event) => {
     event.preventDefault();
 
@@ -17,12 +15,16 @@ const TextBar = () => {
     }
   };
 
+  const debouncedChange = useMemo(() => {
+    return debounce(() => {
+      dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: false}})
+    }, 2000)
+  }, [dispatch, user.name])
+
   const onChangeHandler = (event) => {
-    let timeout;
-    clearTimeout(timeout);
-    setMessage({ ...message, value: event.target.value.trim() });
-    dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: true}});
-    timeout = setTimeout(() => {dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: false}})}, 2500);
+    setMessage({ ...message, value: event.target.value });
+    dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: true}})
+    debouncedChange()
   };
 
   const onInputHandler = async (event) => {
@@ -34,7 +36,6 @@ const TextBar = () => {
 
   return (
     <div className="pt-4 pb-9 px-4 grid gap-2 place-items-center bg-white">
-      {typing}
       <form
         onSubmit={onSubmitHandler}
         className="flex items-center gap-4 text-dark-200 "
