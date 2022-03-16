@@ -1,29 +1,17 @@
 import { io } from "socket.io-client";
 
+const messages = ['MESSAGE', 'USER_TYPING']
+
 export const socketMiddleware = () => {
   return ({ dispatch }) => {
     let socket = io();
+    messages.forEach(message => socket.on(message, (data) => {dispatch({type: `SOCKET/${message}`, payload: data})}))
+    
     return (next) => {
-      return (action) => {
-        // eslint-disable-next-line default-case
+      return (action) => {        
         switch (action.type) {
           case "SOCKET/USER_JOIN":
             socket.emit("USER_JOIN", action.payload);
-
-            socket.on("MESSAGE", (data) => {
-              dispatch({
-                type: "SOCKET/MESSAGE",
-                payload: data,
-              });
-            });
-
-            socket.on("USER_TYPING", (data) => {
-              dispatch({
-                type: "SOCKET/USER_TYPING",
-                payload: data
-              });
-            });
-
             break;
           case "SOCKET/SEND_MESSAGE":
             socket.emit("MESSAGE", action.payload);

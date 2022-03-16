@@ -14,13 +14,15 @@ const TextBar = () => {
     if (message.value || message.image) {
       dispatch({ type: "SOCKET/SEND_MESSAGE", payload: { ...message } });
       setMessage({ value: "", image: "" });
-      dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: false}})
     }
   };
 
   const onChangeHandler = (event) => {
+    let timeout;
+    clearTimeout(timeout);
     setMessage({ ...message, value: event.target.value.trim() });
     dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: true}});
+    timeout = setTimeout(() => {dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: false}})}, 2500);
   };
 
   const onInputHandler = async (event) => {
