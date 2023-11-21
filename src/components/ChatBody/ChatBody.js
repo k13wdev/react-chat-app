@@ -1,33 +1,33 @@
-import React from 'react';
-import ChatBoxOwner from '../ChatBoxOwner/ChatBoxOwner';
-import ChatBox from '../ChatBox/ChatBox';
-
+import ChatboxGroup from "../Chatbox/ChatboxGroup";
+import Chatbox from "../Chatbox/Chatbox";
+import Owner from "../Chatbox/Owner";
+import Chatter from "../Chatbox/Chatter";
+import { useSelector } from "react-redux";
 const ChatBody = () => {
+  const { messagesArr } = useSelector((state) => state.socket);
+  const { user } = useSelector((state) => state.user);
+
   return (
-    <div className='py-1 px-4 self-end'>
-      <ul className='grid gap-1'>
-        <li>
-          <ChatBoxOwner/>
-        </li>
-        <li>
-          <ChatBox/>
-        </li>
-
-        <li>
-          <ChatBox/>
-        </li>
-
-        <li>
-          <ChatBox/>
-        </li>
-
-        <li>
-          <ChatBox/>
-        </li>
-
-      </ul>
-    </div>
-  )
-}
+    <ChatboxGroup>
+      {messagesArr.map((msg, idx) => {
+        return (
+          <Chatbox key={idx}>
+            {msg.authId === user.id ? (
+              <Owner text={msg.text} image={msg.image} time={msg.date} />
+            ) : (
+              <Chatter
+                name={msg.authName}
+                avatar={msg.avatar}
+                text={msg.text}
+                image={msg.image}
+                time={msg.date}
+              />
+            )}
+          </Chatbox>
+        );
+      })}
+    </ChatboxGroup>
+  );
+};
 
 export default ChatBody;

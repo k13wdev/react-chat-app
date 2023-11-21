@@ -1,22 +1,90 @@
+import { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { debounce, toBase64 } from "../../app/helpers";
+
 const TextBar = () => {
+  const {user} = useSelector((state) => state.user);
+  const [message, setMessage] = useState({ value: "", image: "" });
+  const dispatch = useDispatch();
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+
+    if (message.value || message.image) {
+      dispatch({ type: "SOCKET/SEND_MESSAGE", payload: { ...message } });
+      setMessage({ value: "", image: "" });
+    }
+  };
+
+  const debouncedChange = useMemo(() => {
+    return debounce(() => {
+      dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: false}})
+    }, 2000)
+  }, [dispatch, user.name])
+
+  const onChangeHandler = (event) => {
+    setMessage({ ...message, value: event.target.value });
+    dispatch({type: "SOCKET/SEND_USER_TYPING", payload: {name: user.name, typing: true}})
+    debouncedChange()
+  };
+
+  const onInputHandler = async (event) => {
+    const file = event.target.files[0];
+    const imageBase64 = await toBase64(file);
+    setMessage({ ...message, image: imageBase64 });
+    event.target.value = null;
+  };
+
   return (
-    <form className="pt-4 pb-9 px-4 flex items-center gap-4 text-dark-200 bg-white">
-      <button>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.0001 4V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M4.00012 12H20.0001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <textarea className="p-2 w-full h-10  bg-dark-100 rounded-xl"></textarea>
-      <button>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="7.50012" y="2.25" width="9" height="13.5" rx="4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M4.50012 9.75V11.25C4.50012 15.3921 7.85799 18.75 12.0001 18.75V18.75C16.1423 18.75 19.5001 15.3921 19.5001 11.25V9.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12.0001 19.5V21.75M12.0001 21.75H15.0001M12.0001 21.75H9.00012" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </form>
-  )
-}
+    <div className="pt-4 pb-9 px-4 grid gap-2 place-items-center bg-white">
+      <form
+        onSubmit={onSubmitHandler}
+        className="flex items-center gap-4 text-dark-200 "
+      >
+        <label>
+          <input
+            onInput={onInputHandler}
+            className="sr-only"
+            type="file"
+            accept="image/png, image/jpeg"
+          />
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.0001 4V20"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M4.00012 12H20.0001"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </label>
+        <input
+          onChange={onChangeHandler}
+          value={message.value}
+          placeholder="Type something..."
+          className="p-2 w-full h-10  bg-dark-100 rounded-xl placeholder:text-center"
+        />
+      </form>
+      {message.image ? (
+        <img
+          src={message.image}
+          className="w-10 aspect-square object-cover rounded-md"
+        />
+      ) : null}
+    </div>
+  );
+};
 
 export default TextBar;

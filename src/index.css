@@ -3,8 +3,36 @@
 @tailwind utilities;
 
 @layer base {
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: hsla(253, 84%, 75%, 50%);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px #8667F2;
+  }
+
   textarea {
     resize: none;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  :where(ul) div {
+    color: red;
+  }
+
+  body {
+    height: 100%;
+  }
+
+  #root {
+    height: 100%;
   }
 }
 
@@ -29,8 +57,10 @@
   }
 
   .chat {
+    position: relative;
     display: grid;
-    grid-template-rows: min-content max-content min-content;
+    grid-template-rows: min-content 1fr min-content;
+    height: 100%;
     background-image: url("./assets/bg.png");
     background-size: cover;
     background-position: center center;
